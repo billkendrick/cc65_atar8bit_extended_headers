@@ -1,0 +1,6 @@
+TODO.txt for cc65_atar8bit_extended_headers
+2015-07-17
+
+ * Figure out what to do with sound stuff in lib/
+ * Add Makefile to install .h files somewhere
+
