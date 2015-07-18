@@ -1,0 +1,33 @@
+CHANGES.txt for cc65_atar8bit_extended_headers
+Bill Kendrick <bill@newbreedsoftware.com>
+
+ * 2015-07-17: Initial fork into a github project.
+   Based on changesets from my 'hiworld' project:
+   * July 10, 2015
+     - Added a few more page 0 & 2 locations regarding split-screen
+       text windows & more.
+     - Started working on os.h, which includes OS vectors/etc.
+   * June 27, 2015
+     - Renamed chip structures in extended_headers/ with "x"
+       (e.g., __x_gtia_write() to avoid conflict with cc65's
+     - Added "atascii.h" extended header, to give full ATASCII
+       coverage, beyond what cc65 provides.
+       - Also includes (a few; work-in-progress) string literals for each
+         (so you can do, e.g., printf(CHS_CLR "Screen is now blank");)
+     - Added internal keycodes (read from CH (0x2FC), aka PEEK(764))
+       to pokey.h
+   * May 31, 2015
+     - Grabbed the Atari chip headers (_antic.h, _pokey.h, etc.) from
+       cc65 (v2.14, git master as of 2015-05-30), and added stuff:
+       * #defines to shadow registers (e.g., "COLOR0" for "COLPF0")
+       * #defines of bits and other values used by various registers
+         (e.g., CHACTL_INV_TRANS, etc. for CHACTL/CHACT)
+     - Added headers containing useful page 0 and page 2 registers
+       (excluding the shadow registers already included in the chip
+       header files)
+     - Moved sound functions into sound.c/sound.h
+   * January 25, 2014
+     - Added some sound-related routines
+       - SOUND_INIT() - initialize
+       - SOUND(chan, pitch, dist, vol) - play a 8-bit sound on one of 4 channels
+       - DSOUND(chan, pitch, dist, vol) - play a 16-bit sound on one of 2 chans
