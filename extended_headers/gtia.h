@@ -75,10 +75,55 @@ struct __x_gtia_write {
 #define COLOR4 *(unsigned char *) 0x2C8
     
     unsigned char   prior;  /* priority selection */
+/*
+  Priority selection register. PRIOR establishes which objects
+  on the screen (players, missiles, and playfields) will be in front of
+  other objects. Values used in this register are also described at
+  location 623 ($26F), the shadow register. If you use conflicting
+  priorities, objects whose priorities are in conflict will turn black
+  in their overlap region.
+*/
+#define GPRIOR 0x26F
+
+#define PRIOR_P03_PF03          0x01 /* Players 0-3, then Playfields 0-3, then background */
+#define PRIOR_P01_PF03_P23      0x02 /* Players 0-1, then Playfields 0-3, then Players 2-3, then background */
+#define PRIOR_PF03_P03          0x04 /* Playfields 0-3, then Players 0-3, then background */
+#define PRIOR_PF01_P03_PF23     0x08 /* Playfields 0-1, then Players 0-3, then Playfields 2-3, then background */
+
+#define PRIOR_5TH_PLAYER        0x10 /* Four missiles combine to be a 5th player (uses COLOR3) */
+#define PRIOR_OVERLAP_3RD_COLOR 0x20 /* Overlap of players 0 and 1, and of players 2 and 3, results in a third color
+                                        (else overlap is black). The resulting color is a logical OR of the two player colors. */
+
+#define PRIOR_GFX_MODE_9        0x40 /* 80x192 16 shade mode (shades of the background (COLOR4) hue) */
+#define PRIOR_GFX_MODE_10       0x80 /* 80x192 9 color mode (PCOLR0 (acts as background) thru PCOLR3, followed by COLOR0 thru COLOR4) */
+#define PRIOR_GFX_MODE_11       0xC0 /* 80x192 16 hue mode (hues of the background (COLOR4) brightness) */
+
     unsigned char   vdelay; /* vertical delay */
+/*
+     Vertical delay register. Used to give one-line resolution
+     movement capability in the vertical positioning of an object when
+     the two line resolution display is enabled. Setting a bit in
+     VDELAY to one moves the corresponding object down by one TV
+     line. If DMA is enabled, then moving an object by more than one
+     line is accomplished by moving bits in the memory map instead.
+*/
+#define VDELAY_MISSILE0 0x01
+#define VDELAY_MISSILE1 0x02
+#define VDELAY_MISSILE2 0x04
+#define VDELAY_MISSILE3 0x08
+#define VDELAY_PLAYER0 0x10
+#define VDELAY_PLAYER1 0x20
+#define VDELAY_PLAYER2 0x40
+#define VDELAY_PLAYER3 0x80
+
     unsigned char   gractl; /* stick/paddle latch, p/m control */
+#define GRACTL_MISSLES 0x01
+#define GRACTL_PLAYERS 0x02
+#define GRACTL_LATCH_TRIGGER_INPUTS 0x04
+
     unsigned char   hitclr; /* clear p/m collision */
-    unsigned char   consol; /* console buttons */
+
+    unsigned char   consol; /* console speaker/buzzer */
 };
 
 /* Define a structure with the gtia register offsets */
@@ -104,6 +149,21 @@ struct __x_gtia_read {
     unsigned char   trig2;  /* joystick trigger 2 */
     unsigned char   trig3;  /* joystick trigger 3 */
     unsigned char   pal;    /* pal/ntsc flag */
+    unsigned char   _unused1;
+    unsigned char   _unused2;
+    unsigned char   _unused3;
+    unsigned char   _unused4;
+    unsigned char   _unused5;
+    unsigned char   _unused6;
+    unsigned char   _unused7;
+    unsigned char   _unused8;
+    unsigned char   _unused9;
+    unsigned char   _unused10;
+    unsigned char   consol; /* console buttons */
+/* FIXME: the values are inverted bits; not sure the best way of making this easy to program (need sleep+coffee) */
+#define CONSOL_START  0x01
+#define CONSOL_SELECT 0x02
+#define CONSOL_OPTION 0x04
 };
 
 /* End of gtia.h */
